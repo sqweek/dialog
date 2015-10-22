@@ -56,8 +56,6 @@ func (b *FileBuilder) save() (string, error) {
 	if w32.GetSaveFileName(d.opf) {
 		return d.Filename(), nil
 	}
-	fmt.Println(w32.CommDlgExtendedError())
-	fmt.Printf("%#v\n", d)
 	return "", err()
 }
 
