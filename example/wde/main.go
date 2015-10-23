@@ -35,7 +35,7 @@ func events(events <-chan interface{}) {
 				** in a separate goroutine, and arrange modality via some
 				** other mechanism (if desired). */
 				if e.Where.In(loadR) {
-					f, err = dialog.File().Title("LOL").Load()
+					f, err = dialog.File().Title("LOL").Filter("Image", "png").Filter("Audio", "mp3").Filter("All files", "*").Load()
 				} else {
 					f, err = dialog.File().Title("Hilarious").Save()
 				}

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/AllenDang/w32"
 	"reflect"
-	"strings"
 	"syscall"
 	"unicode/utf16"
 	"unsafe"
@@ -92,11 +91,17 @@ func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 		d.opf.InitialDir, _ = syscall.UTF16PtrFromString(b.StartDir)
 	}
 	for _, filt := range b.Filters {
-		s := fmt.Sprintf("%s\000%s\000", filt.Desc, strings.Join(filt.Patterns, ";"))
-		d.filters = append(d.filters, utf16.Encode([]rune(s))...)
+		/* build utf16 string of form "Music File\0*.mp3;*.ogg;*.wav;\0" */
+		d.filters = append(d.filters, utf16.Encode([]rune(filt.Desc))...)
+		d.filters = append(d.filters, 0)
+		for _, ext := range filt.Extensions {
+			s := fmt.Sprintf("*.%s;", ext)
+			d.filters = append(d.filters, utf16.Encode([]rune(s))...)
+		}
+		d.filters = append(d.filters, 0)
 	}
 	if d.filters != nil {
-		d.filters = append(d.filters, 0, 0)
+		d.filters = append(d.filters, 0, 0) // two extra NUL chars to terminate the list
 		d.opf.Filter = utf16ptr(d.filters)
 	}
 	return d

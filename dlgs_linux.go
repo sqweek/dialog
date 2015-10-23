@@ -50,8 +50,8 @@ func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (str
 	for _, filt := range b.Filters {
 		filter := gtk.NewFileFilter()
 		filter.SetName(filt.Desc)
-		for _, p := range filt.Patterns {
-			filter.AddPattern(p)
+		for _, ext := range filt.Extensions {
+			filter.AddPattern("*." + ext)
 		}
 		dlg.AddFilter(filter)
 	}
