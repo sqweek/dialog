@@ -39,7 +39,7 @@ func (b *FileBuilder) save() (string, error) {
 		return "", err
 	}
 	_, err = os.Stat(f)
-	if !os.IsNotExist(err) && !MsgDlg("%s already exists, overwrite?", filepath.Base(f)).yesNo() {
+	if !os.IsNotExist(err) && !Message("%s already exists, overwrite?", filepath.Base(f)).yesNo() {
 		return "", Cancelled
 	}
 	return f, nil
