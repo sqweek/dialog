@@ -1,6 +1,14 @@
 #import <Cocoa/Cocoa.h>
 #include "dlg.h"
 
+void* NSStr(void* buf, int len) {
+	return (void*)[[NSString alloc] initWithBytes:buf length:len encoding:NSUTF8StringEncoding];
+}
+
+void NSRelease(void* obj) {
+	[(NSObject*)obj release];
+}
+
 @interface AlertDlg : NSObject {
 	AlertDlgParams* params;
 	DlgResult result;
@@ -71,6 +79,12 @@ DlgResult fileDlg(FileDlgParams* params) {
 	[panel setFloatingPanel:YES];
 	if(self->params->title != nil) {
 		[panel setTitle:[[NSString alloc] initWithUTF8String:self->params->title]];
+	}
+	if(self->params->numext > 0) {
+		[panel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString**)self->params->exts count:self->params->numext]];
+	}
+	if(self->params->relaxext) {
+		[panel setAllowsOtherFileTypes:YES];
 	}
 	return [panel runModal];
 }

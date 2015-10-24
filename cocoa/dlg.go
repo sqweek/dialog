@@ -1,7 +1,6 @@
 package cocoa
 
 // #cgo darwin LDFLAGS: -framework Cocoa
-// #include <objc/NSObjcRuntime.h>
 // #include <stdlib.h>
 // #include "dlg.h"
 import "C"
@@ -11,6 +10,10 @@ import (
 	"errors"
 	"unsafe"
 )
+
+func nsStr(s string) unsafe.Pointer {
+	return C.NSStr(unsafe.Pointer(&[]byte(s)[0]), C.int(len(s)))
+}
 
 func YesNoDlg(msg string, title string) bool {
 	p := C.AlertDlgParams{
@@ -24,7 +27,7 @@ func YesNoDlg(msg string, title string) bool {
 	return C.alertDlg(&p) == C.DLG_OK
 }
 
-func FileDlg(save int, title string) (string, error) {
+func FileDlg(save int, title string, exts []string, relaxExt bool) (string, error) {
 	buf := make([]byte, 1024)
 	p := C.FileDlgParams{
 		save: C.int(save),
@@ -34,6 +37,19 @@ func FileDlg(save int, title string) (string, error) {
 	if title != "" {
 		p.title = C.CString(title)
 		defer C.free(unsafe.Pointer(p.title))
+	}
+	if len(exts) > 0 {
+		cext := make([]unsafe.Pointer, len(exts))
+		for i, ext := range exts {
+			i := i
+			cext[i] = nsStr(ext)
+			defer C.NSRelease(cext[i])
+		}
+		p.exts = (*unsafe.Pointer)(unsafe.Pointer(&cext[0]))
+		p.numext = C.int(len(cext))
+		if relaxExt {
+			p.relaxext = 1;
+		}
 	}
 	switch C.fileDlg(&p) {
 	case C.DLG_OK:

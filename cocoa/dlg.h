@@ -1,3 +1,5 @@
+#include <objc/NSObjcRuntime.h>
+
 typedef struct {
 	char* msg;
 	char* title;
@@ -8,6 +10,9 @@ typedef struct {
 	char* buf; /* buffer to store selected file */
 	int nbuf; /* number of bytes allocated at buf */
 	char* title; /* title for dialog box (can be nil) */
+	void** exts; /* list of valid extensions (elements actual type is NSString*) */
+	int numext; /* number of items in exts */
+	int relaxext; /* allow other extensions? */
 } FileDlgParams;
 
 typedef enum {
@@ -18,3 +23,6 @@ typedef enum {
 
 DlgResult alertDlg(AlertDlgParams*);
 DlgResult fileDlg(FileDlgParams*);
+
+void* NSStr(void* buf, int len);
+void NSRelease(void* obj);
