@@ -90,6 +90,9 @@ func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 	if b.StartDir != "" {
 		d.opf.InitialDir, _ = syscall.UTF16PtrFromString(b.StartDir)
 	}
+	if b.Dlg.Title != "" {
+		d.opf.Title, _ = syscall.UTF16PtrFromString(b.Dlg.Title)
+	}
 	for _, filt := range b.Filters {
 		/* build utf16 string of form "Music File\0*.mp3;*.ogg;*.wav;\0" */
 		d.filters = append(d.filters, utf16.Encode([]rune(filt.Desc))...)
