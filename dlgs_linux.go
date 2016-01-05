@@ -29,6 +29,13 @@ func (b *MsgBuilder) yesNo() bool {
 	return dlg.Run() == gtk.RESPONSE_YES
 }
 
+func (b *MsgBuilder) error() {
+	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "%s", b.Msg)
+	dlg.SetTitle(firstOf(b.Dlg.Title, "Error"))
+	defer closeDialog(&dlg.Dialog)
+	dlg.Run()
+}
+
 func (b *FileBuilder) load() (string, error) {
 	return chooseFile("Load", gtk.FILE_CHOOSER_ACTION_OPEN, b)
 }

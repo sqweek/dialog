@@ -38,8 +38,16 @@ DlgResult alertDlg(AlertDlgParams* params) {
 		[[alert window] setTitle:[[NSString alloc] initWithUTF8String:self->params->title]];
 	}
 	[alert setMessageText:[[NSString alloc] initWithUTF8String:self->params->msg]];
-	[alert addButtonWithTitle:@"Yes"];
-	[alert addButtonWithTitle:@"No"];
+	switch (self->params->style) {
+	case MSG_YESNO:
+		[alert addButtonWithTitle:@"Yes"];
+		[alert addButtonWithTitle:@"No"];
+		break;
+	case MSG_ERROR:
+		[alert setIcon:[NSImage imageNamed:NSImageNameCaution]];
+		[alert addButtonWithTitle:@"OK"];
+		break;
+	}
 	self->result = [alert runModal] == NSAlertFirstButtonReturn ? DLG_OK : DLG_CANCEL;
 	return self->result;
 }

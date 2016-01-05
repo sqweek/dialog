@@ -46,6 +46,11 @@ func (b *MsgBuilder) YesNo() bool {
 	return b.yesNo()
 }
 
+/* Error spawns the message dialog with an error icon and single button, "Ok". */
+func (b *MsgBuilder) Error() {
+	b.error()
+}
+
 /* FileFilter represents a category of files (eg. audio files, spreadsheets). */
 type FileFilter struct {
 	Desc string

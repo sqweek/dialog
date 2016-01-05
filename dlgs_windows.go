@@ -28,6 +28,10 @@ func (b *MsgBuilder) yesNo() bool {
 	return r == w32.IDYES
 }
 
+func (b *MsgBuilder) error() {
+	w32.MessageBox(w32.HWND(0), firstOf(b.Dlg.Title, "Error"), b.Msg, w32.MB_OK | w32.MB_ICONERROR)
+}
+
 type filedlg struct {
 	buf []uint16
 	filters []uint16

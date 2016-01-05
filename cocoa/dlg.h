@@ -1,8 +1,14 @@
 #include <objc/NSObjcRuntime.h>
 
+typedef enum {
+	MSG_YESNO,
+	MSG_ERROR,
+} AlertStyle;
+
 typedef struct {
 	char* msg;
 	char* title;
+	AlertStyle style;
 } AlertDlgParams;
 
 typedef struct {

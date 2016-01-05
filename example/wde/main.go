@@ -48,6 +48,8 @@ func events(events <-chan interface{}) {
 				fmt.Println(dialog.Message("Is this sentence false?").YesNo())
 			case e.Glyph == "b":
 				fmt.Println(dialog.Message("R U OK?").Title("Just checking").YesNo())
+			case e.Glyph == "c":
+				dialog.Message("Operation failed").Error()
 			}
 		case wde.CloseEvent:
 			wde.Stop()
