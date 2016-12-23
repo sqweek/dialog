@@ -2,6 +2,7 @@ package cocoa
 
 // #cgo darwin LDFLAGS: -framework Cocoa
 // #include <stdlib.h>
+// #include <sys/syslimits.h>
 // #include "dlg.h"
 import "C"
 
@@ -50,7 +51,7 @@ func ErrorDlg(msg, title string) {
 	a.run()
 }
 
-const BUFSIZE = 1024
+const BUFSIZE = C.PATH_MAX
 
 func FileDlg(save int, title string, exts []string, relaxExt bool) (string, error) {
 	p := C.FileDlgParams{
