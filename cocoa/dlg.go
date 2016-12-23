@@ -50,32 +50,41 @@ func ErrorDlg(msg, title string) {
 	a.run()
 }
 
+const BUFSIZE = 1024
+
 func FileDlg(save int, title string, exts []string, relaxExt bool) (string, error) {
-	buf := make([]byte, 1024)
 	p := C.FileDlgParams{
 		save: C.int(save),
-		buf: (*C.char)(unsafe.Pointer(&buf[0])),
-		nbuf: C.int(cap(buf)),
+		nbuf: BUFSIZE,
 	}
+	p.buf = (*C.char)(C.malloc(BUFSIZE))
+	defer C.free(unsafe.Pointer(p.buf))
+	buf := (*(*[BUFSIZE]byte)(unsafe.Pointer(p.buf)))[:]
 	if title != "" {
 		p.title = C.CString(title)
 		defer C.free(unsafe.Pointer(p.title))
 	}
 	if len(exts) > 0 {
-		cext := make([]unsafe.Pointer, len(exts))
+		if len(exts) > 999 {
+			panic("more than 999 extensions not supported")
+		}
+		ptrSize := int(unsafe.Sizeof(&title))
+		p.exts = (*unsafe.Pointer)(C.malloc(C.size_t(ptrSize * len(exts))))
+		defer C.free(unsafe.Pointer(p.exts))
+		cext := (*(*[999]unsafe.Pointer)(unsafe.Pointer(p.exts)))[:]
 		for i, ext := range exts {
 			i := i
 			cext[i] = nsStr(ext)
 			defer C.NSRelease(cext[i])
 		}
-		p.exts = (*unsafe.Pointer)(unsafe.Pointer(&cext[0]))
-		p.numext = C.int(len(cext))
+		p.numext = C.int(len(exts))
 		if relaxExt {
 			p.relaxext = 1;
 		}
 	}
 	switch C.fileDlg(&p) {
 	case C.DLG_OK:
+		// casting to string copies the [about-to-be-freed] bytes
 		return string(buf[:bytes.Index(buf, []byte{0})]), nil
 	case C.DLG_CANCEL:
 		return "", nil
