@@ -88,6 +88,12 @@ func (b *FileBuilder) Filter(desc string, extensions ...string) *FileBuilder {
 	return b
 }
 
+/* SetStartDir specifies the initial directory of the dialog. */
+func (b *FileBuilder) SetStartDir(startDir string) *FileBuilder {
+	b.StartDir = startDir
+	return b
+}
+
 /* Load spawns the file selection dialog using the configured settings,
 asking the user to select a single file. Returns Cancelled as the error
 if the user cancels or closes the dialog. */
