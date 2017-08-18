@@ -88,8 +88,7 @@ func (b *FileBuilder) Filter(desc string, extensions ...string) *FileBuilder {
 	return b
 }
 
-/* SetStartDir specifies the initial directory of the dialog. Must use
-Windows-style path. */
+/* SetStartDir specifies the initial directory of the dialog. */
 func (b *FileBuilder) SetStartDir(startDir string) *FileBuilder {
 	b.StartDir = startDir
 	return b
