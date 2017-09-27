@@ -46,6 +46,11 @@ func (b *MsgBuilder) YesNo() bool {
 	return b.yesNo()
 }
 
+/* OkDialog spawns the message dialog with an information icon and single button, "Ok". */
+func (b *MsgBuilder) OkDialog() {
+	b.error()
+}
+
 /* Error spawns the message dialog with an error icon and single button, "Ok". */
 func (b *MsgBuilder) Error() {
 	b.error()
@@ -53,14 +58,14 @@ func (b *MsgBuilder) Error() {
 
 /* FileFilter represents a category of files (eg. audio files, spreadsheets). */
 type FileFilter struct {
-	Desc string
+	Desc       string
 	Extensions []string
 }
 
 type FileBuilder struct {
 	Dlg
 	StartDir string
-	Filters []FileFilter
+	Filters  []FileFilter
 }
 
 /* File initialises a FileBuilder using the default configuration. */
@@ -109,4 +114,3 @@ not to overwrite the file. */
 func (b *FileBuilder) Save() (string, error) {
 	return b.save()
 }
-
