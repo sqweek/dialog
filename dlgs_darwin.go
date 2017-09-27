@@ -8,6 +8,10 @@ func (b *MsgBuilder) yesNo() bool {
 	return cocoa.YesNoDlg(b.Msg, b.Dlg.Title)
 }
 
+func (b *MsgBuilder) okDialog() {
+	cocoa.OkDlg(b.Msg, b.Dlg.Title)
+}
+
 func (b *MsgBuilder) error() {
 	cocoa.ErrorDlg(b.Msg, b.Dlg.Title)
 }
