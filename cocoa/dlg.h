@@ -3,6 +3,7 @@
 typedef enum {
 	MSG_YESNO,
 	MSG_ERROR,
+	MSG_INFO,
 } AlertStyle;
 
 typedef struct {

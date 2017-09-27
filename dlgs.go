@@ -46,6 +46,11 @@ func (b *MsgBuilder) YesNo() bool {
 	return b.yesNo()
 }
 
+/* Info spawns the message dialog with an information icon and single button, "Ok". */
+func (b *MsgBuilder) Info() {
+	b.info()
+}
+
 /* Error spawns the message dialog with an error icon and single button, "Ok". */
 func (b *MsgBuilder) Error() {
 	b.error()

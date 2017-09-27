@@ -45,6 +45,12 @@ func YesNoDlg(msg, title string) bool {
 	return a.run() == C.DLG_OK
 }
 
+func InfoDlg(msg, title string) {
+	a := mkAlertParams(msg, title, C.MSG_INFO)
+	defer a.free()
+	a.run()
+}
+
 func ErrorDlg(msg, title string) {
 	a := mkAlertParams(msg, title, C.MSG_ERROR)
 	defer a.free()

@@ -47,6 +47,10 @@ DlgResult alertDlg(AlertDlgParams* params) {
 		[alert setIcon:[NSImage imageNamed:NSImageNameCaution]];
 		[alert addButtonWithTitle:@"OK"];
 		break;
+	case MSG_INFO:
+		[alert setIcon:[NSImage imageNamed:NSImageNameInfo]];
+		[alert addButtonWithTitle:@"OK"];
+		break;
 	}
 	self->result = [alert runModal] == NSAlertFirstButtonReturn ? DLG_OK : DLG_CANCEL;
 	return self->result;
