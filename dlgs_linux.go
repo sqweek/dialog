@@ -30,7 +30,7 @@ func (b *MsgBuilder) yesNo() bool {
 	return dlg.Run() == gtk.RESPONSE_YES
 }
 
-func (b *MsgBuilder) okDialog() {
+func (b *MsgBuilder) ok() {
 	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "%s", b.Msg)
 	dlg.SetTitle(firstOf(b.Dlg.Title, "Information"))
 	defer closeDialog(&dlg.Dialog)
