@@ -48,6 +48,7 @@ DlgResult alertDlg(AlertDlgParams* params) {
 		[alert addButtonWithTitle:@"OK"];
 		break;
 	case MSG_OK:
+		[alert setIcon:[NSImage imageNamed:NSImageNameInfo]];
 		[alert addButtonWithTitle:@"OK"];
 		break;
 	}
