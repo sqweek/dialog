@@ -48,7 +48,7 @@ func (b *MsgBuilder) YesNo() bool {
 
 /* OkDialog spawns the message dialog with an information icon and single button, "Ok". */
 func (b *MsgBuilder) OkDialog() {
-	b.error()
+	b.okDialog()
 }
 
 /* Error spawns the message dialog with an error icon and single button, "Ok". */

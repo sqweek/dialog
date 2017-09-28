@@ -14,5 +14,4 @@ func main() {
 	file, err := dialog.File().Title("Save As").Filter("All Files", "*").Save()
 	fmt.Println(file)
 	fmt.Println("Error:", err)
-	dialog.Message("%s", "Some message here").Title("Some title").OkDialog()
 }
