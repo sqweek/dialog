@@ -45,6 +45,12 @@ func YesNoDlg(msg, title string) bool {
 	return a.run() == C.DLG_OK
 }
 
+func OkDlg(msg, title string) {
+	a := mkAlertParams(msg, title, C.MSG_OK)
+	defer a.free()
+	a.run()
+}
+
 func ErrorDlg(msg, title string) {
 	a := mkAlertParams(msg, title, C.MSG_ERROR)
 	defer a.free()
@@ -80,7 +86,7 @@ func FileDlg(save int, title string, exts []string, relaxExt bool) (string, erro
 		}
 		p.numext = C.int(len(exts))
 		if relaxExt {
-			p.relaxext = 1;
+			p.relaxext = 1
 		}
 	}
 	switch C.fileDlg(&p) {

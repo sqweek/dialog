@@ -3,6 +3,7 @@ package dialog
 import (
 	"os"
 	"path/filepath"
+
 	"github.com/mattn/go-gtk/gtk"
 )
 
@@ -27,6 +28,13 @@ func (b *MsgBuilder) yesNo() bool {
 	dlg.SetTitle(firstOf(b.Dlg.Title, "Confirm?"))
 	defer closeDialog(&dlg.Dialog)
 	return dlg.Run() == gtk.RESPONSE_YES
+}
+
+func (b *MsgBuilder) ok() {
+	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "%s", b.Msg)
+	dlg.SetTitle(firstOf(b.Dlg.Title, "Information"))
+	defer closeDialog(&dlg.Dialog)
+	dlg.Run()
 }
 
 func (b *MsgBuilder) error() {
