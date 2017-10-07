@@ -53,14 +53,14 @@ func (b *MsgBuilder) Error() {
 
 /* FileFilter represents a category of files (eg. audio files, spreadsheets). */
 type FileFilter struct {
-	Desc string
+	Desc       string
 	Extensions []string
 }
 
 type FileBuilder struct {
 	Dlg
 	StartDir string
-	Filters []FileFilter
+	Filters  []FileFilter
 }
 
 /* File initialises a FileBuilder using the default configuration. */
@@ -109,4 +109,3 @@ not to overwrite the file. */
 func (b *FileBuilder) Save() (string, error) {
 	return b.save()
 }
-

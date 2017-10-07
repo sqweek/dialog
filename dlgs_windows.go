@@ -2,11 +2,12 @@ package dialog
 
 import (
 	"fmt"
-	"github.com/AllenDang/w32"
 	"reflect"
 	"syscall"
 	"unicode/utf16"
 	"unsafe"
+
+	"github.com/AllenDang/w32"
 )
 
 type WinDlgError int
@@ -29,13 +30,13 @@ func (b *MsgBuilder) yesNo() bool {
 }
 
 func (b *MsgBuilder) error() {
-	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Error"), w32.MB_OK | w32.MB_ICONERROR)
+	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Error"), w32.MB_OK|w32.MB_ICONERROR)
 }
 
 type filedlg struct {
-	buf []uint16
+	buf     []uint16
 	filters []uint16
-	opf *w32.OPENFILENAME
+	opf     *w32.OPENFILENAME
 }
 
 func (d filedlg) Filename() string {
@@ -64,14 +65,14 @@ func (b *FileBuilder) save() (string, error) {
 
 /* syscall.UTF16PtrFromString not sufficient because we need to encode embedded NUL bytes */
 func utf16ptr(utf16 []uint16) *uint16 {
-	if utf16[len(utf16) - 1] != 0 {
+	if utf16[len(utf16)-1] != 0 {
 		panic("refusing to make ptr to non-NUL terminated utf16 slice")
 	}
 	h := (*reflect.SliceHeader)(unsafe.Pointer(&utf16))
 	return (*uint16)(unsafe.Pointer(h.Data))
 }
 
-func utf16slice(ptr *uint16) []uint16{
+func utf16slice(ptr *uint16) []uint16 {
 	hdr := reflect.SliceHeader{Data: uintptr(unsafe.Pointer(ptr)), Len: 1, Cap: 1}
 	slice := *((*[]uint16)(unsafe.Pointer(&hdr)))
 	i := 0
@@ -86,9 +87,9 @@ func utf16slice(ptr *uint16) []uint16{
 func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 	d.buf = make([]uint16, w32.MAX_PATH)
 	d.opf = &w32.OPENFILENAME{
-		File: utf16ptr(d.buf),
+		File:    utf16ptr(d.buf),
 		MaxFile: uint32(len(d.buf)),
-		Flags: flags,
+		Flags:   flags,
 	}
 	d.opf.StructSize = uint32(unsafe.Sizeof(*d.opf))
 	if b.StartDir != "" {
