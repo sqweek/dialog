@@ -118,3 +118,24 @@ func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 	}
 	return d
 }
+
+type dirdlg struct {
+	bi *w32.BROWSEINFO
+}
+
+func selectdir(b *DirectoryBuilder) (d dirdlg) {
+	d.bi = &w32.BROWSEINFO{}
+	if b.Dlg.Title != "" {
+		d.bi.Title, _ = syscall.UTF16PtrFromString(b.Dlg.Title)
+	}
+	return d
+}
+
+func (b *DirectoryBuilder) browse() (string, error) {
+	d := selectdir(b)
+	res := w32.SHBrowseForFolder(d.bi)
+	if res == 0 {
+		return "", Cancelled
+	}
+	return w32.SHGetPathFromIDList(res), nil
+}

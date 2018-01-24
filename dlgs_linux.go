@@ -80,3 +80,7 @@ func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (str
 	}
 	return "", Cancelled
 }
+
+func (b *DirectoryBuilder) browse() (string, error) {
+	panic("not implemented")
+}

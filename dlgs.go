@@ -114,3 +114,26 @@ not to overwrite the file. */
 func (b *FileBuilder) Save() (string, error) {
 	return b.save()
 }
+
+type DirectoryBuilder struct {
+	Dlg
+	StartDir string
+}
+
+/* Directory initialises a DirectoryBuilder using the default configuration. */
+func Directory() *DirectoryBuilder {
+	return &DirectoryBuilder{}
+}
+
+/* Browse spawns the directory selection dialog using the configured settings,
+asking the user to select a single folder. Returns Cancelled as the error
+if the user cancels or closes the dialog. */
+func (b *DirectoryBuilder) Browse() (string, error) {
+	return b.browse()
+}
+
+/* Title specifies the title to be used for the dialog. */
+func (b *DirectoryBuilder) Title(title string) *DirectoryBuilder {
+	b.Dlg.Title = title
+	return b
+}

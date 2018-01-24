@@ -19,6 +19,10 @@ In the latter case, `filename` will be the empty string and `err` will equal `di
 Asks the user for a filename to write data into. If the user selects a file which already exists,
 an additional dialog is spawned to confirm they want to overwrite the existing file.
 
+    directory, err := dialog.Directory().Title("Load images").Browse()
+
+Asks the user for a directory. The directory dialog is **only supported on Windows** for now.
+
 # platform details
 * OSX: uses Cocoa's NSAlert/NSSavePanel/SOpenPanel clasess
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/AllenDang/w32)

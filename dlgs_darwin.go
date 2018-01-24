@@ -48,3 +48,7 @@ func (b *FileBuilder) run(save int) (string, error) {
 	}
 	return f, err
 }
+
+func (b *DirectoryBuilder) browse() (string, error) {
+	panic("not implemented")
+}
