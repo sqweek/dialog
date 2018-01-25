@@ -12,8 +12,12 @@ typedef struct {
 	AlertStyle style;
 } AlertDlgParams;
 
+#define LOADDLG 0
+#define SAVEDLG 1
+#define DIRDLG 2 // browse for directory
+
 typedef struct {
-	int save; /* non-zero => save dialog, zero => open dialog */
+	int mode; /* which dialog style to invoke (see earlier defines) */
 	char* buf; /* buffer to store selected file */
 	int nbuf; /* number of bytes allocated at buf */
 	char* title; /* title for dialog box (can be nil) */

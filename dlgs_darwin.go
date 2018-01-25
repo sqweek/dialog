@@ -17,14 +17,14 @@ func (b *MsgBuilder) error() {
 }
 
 func (b *FileBuilder) load() (string, error) {
-	return b.run(0)
+	return b.run(false)
 }
 
 func (b *FileBuilder) save() (string, error) {
-	return b.run(1)
+	return b.run(true)
 }
 
-func (b *FileBuilder) run(save int) (string, error) {
+func (b *FileBuilder) run(save bool) (string, error) {
 	star := false
 	var exts []string
 	for _, filt := range b.Filters {
@@ -36,7 +36,7 @@ func (b *FileBuilder) run(save int) (string, error) {
 			}
 		}
 	}
-	if star && save == 0 {
+	if star && save {
 		/* OSX doesn't allow the user to switch visible file types/extensions. Also
 		** NSSavePanel's allowsOtherFileTypes property has no effect for an open
 		** dialog, so if "*" is a possible extension we must always show all files. */
@@ -50,5 +50,9 @@ func (b *FileBuilder) run(save int) (string, error) {
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {
-	panic("not implemented")
+	f, err := cocoa.DirDlg(b.Dlg.Title);
+	if f == "" && err == nil {
+		return "", Cancelled
+	}
+	return f, err
 }

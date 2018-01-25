@@ -79,7 +79,7 @@ DlgResult fileDlg(FileDlgParams* params) {
 - (DlgResult)run {
 	if(![NSThread isMainThread]) {
 		[self performSelectorOnMainThread:@selector(run) withObject:nil waitUntilDone:YES];
-	} else if(self->params->save) {
+	} else if(self->params->mode == SAVEDLG) {
 		self->result = [self save];
 	} else {
 		self->result = [self load];
@@ -113,6 +113,10 @@ DlgResult fileDlg(FileDlgParams* params) {
 
 - (DlgResult)load {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
+	if(self->params->mode == DIRDLG) {
+		[panel setCanChooseDirectories:YES];
+		[panel setCanChooseFiles:NO];
+	}
 	if(![self runPanel:panel]) {
 		return DLG_CANCEL;
 	}
@@ -122,4 +126,5 @@ DlgResult fileDlg(FileDlgParams* params) {
 	}
 	return DLG_OK;
 }
+
 @end

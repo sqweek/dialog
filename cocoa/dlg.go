@@ -59,9 +59,21 @@ func ErrorDlg(msg, title string) {
 
 const BUFSIZE = C.PATH_MAX
 
-func FileDlg(save int, title string, exts []string, relaxExt bool) (string, error) {
+func FileDlg(save bool, title string, exts []string, relaxExt bool) (string, error) {
+	mode := C.LOADDLG
+	if save {
+		mode = C.SAVEDLG
+	}
+	return fileDlg(mode, title, exts, relaxExt)
+}
+
+func DirDlg(title string) (string, error) {
+	return fileDlg(C.DIRDLG, title, nil, false)
+}
+
+func fileDlg(mode int, title string, exts []string, relaxExt bool) (string, error) {
 	p := C.FileDlgParams{
-		save: C.int(save),
+		mode: C.int(mode),
 		nbuf: BUFSIZE,
 	}
 	p.buf = (*C.char)(C.malloc(BUFSIZE))
