@@ -21,9 +21,9 @@ an additional dialog is spawned to confirm they want to overwrite the existing f
 
     directory, err := dialog.Directory().Title("Load images").Browse()
 
-Asks the user for a directory. The directory dialog is **only supported on Windows** for now.
+Asks the user for a directory.
 
 # platform details
-* OSX: uses Cocoa's NSAlert/NSSavePanel/SOpenPanel clasess
+* OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel clasess
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/AllenDang/w32)
 * Linux: uses Gtk's MessageDialog/FileChooserDialog (via package github.com/mattn/gtk)

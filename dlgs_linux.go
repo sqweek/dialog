@@ -82,5 +82,5 @@ func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (str
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {
-	panic("not implemented")
+	return chooseFile("Open Directory", gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, &FileBuilder{Dlg: b.Dlg})
 }
