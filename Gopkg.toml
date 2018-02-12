@@ -1,0 +1,15 @@
+[[constraint]]
+  branch = "master"
+  name = "github.com/AllenDang/w32"
+
+[[constraint]]
+  name = "github.com/mattn/go-gtk"
+  version = "go-v5596"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/skelterjohn/go.wde"
+
+[prune]
+  go-tests = true
+  unused-packages = true
