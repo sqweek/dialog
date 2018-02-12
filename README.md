@@ -24,6 +24,12 @@ an additional dialog is spawned to confirm they want to overwrite the existing f
 Asks the user for a directory.
 
 # platform details
-* OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel clasess
+* OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel classes
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/AllenDang/w32)
 * Linux: uses Gtk's MessageDialog/FileChooserDialog (via package github.com/mattn/gtk)
+
+# build
+```
+go mod download
+go build
+```
