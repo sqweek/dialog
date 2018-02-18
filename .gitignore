@@ -1,6 +1,2 @@
-# Intellij
-/.idea
-/*.iml
-
-# Dep
+# go dep
 /vendor
