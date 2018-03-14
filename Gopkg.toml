@@ -1,3 +1,7 @@
+ignored = [
+  "github.com/mattn/go-gtk/gdk"
+]
+
 [[constraint]]
   branch = "master"
   name = "github.com/AllenDang/w32"
@@ -9,7 +13,3 @@
 [[constraint]]
   branch = "master"
   name = "github.com/skelterjohn/go.wde"
-
-[prune]
-  go-tests = true
-  unused-packages = true
