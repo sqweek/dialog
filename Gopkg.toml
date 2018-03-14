@@ -4,7 +4,7 @@
 
 [[constraint]]
   name = "github.com/mattn/go-gtk"
-  version = "go-v5596"
+  revision = "5a311a1830abecc430a6a598b24094f69d907e96"
 
 [[constraint]]
   branch = "master"
