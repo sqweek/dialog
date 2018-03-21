@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/mattn/go-gtk/gtk"
+	"github.com/gotk3/gotk3/gtk"
 )
 
 func init() {
@@ -24,21 +24,21 @@ func closeDialog(dlg *gtk.Dialog) {
 }
 
 func (b *MsgBuilder) yesNo() bool {
-	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, "%s", b.Msg)
+	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, "%s", b.Msg)
 	dlg.SetTitle(firstOf(b.Dlg.Title, "Confirm?"))
 	defer closeDialog(&dlg.Dialog)
 	return dlg.Run() == gtk.RESPONSE_YES
 }
 
 func (b *MsgBuilder) info() {
-	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "%s", b.Msg)
+	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "%s", b.Msg)
 	dlg.SetTitle(firstOf(b.Dlg.Title, "Information"))
 	defer closeDialog(&dlg.Dialog)
 	dlg.Run()
 }
 
 func (b *MsgBuilder) error() {
-	dlg := gtk.NewMessageDialog(nil, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "%s", b.Msg)
+	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "%s", b.Msg)
 	dlg.SetTitle(firstOf(b.Dlg.Title, "Error"))
 	defer closeDialog(&dlg.Dialog)
 	dlg.Run()
@@ -61,9 +61,17 @@ func (b *FileBuilder) save() (string, error) {
 }
 
 func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (string, error) {
-	dlg := gtk.NewFileChooserDialog(firstOf(b.Dlg.Title, title), nil, action, gtk.STOCK_OK, gtk.RESPONSE_ACCEPT, gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+	dlg, err := gtk.FileChooserDialogNewWith2Buttons(firstOf(b.Dlg.Title, title), nil, action, "Ok", gtk.RESPONSE_ACCEPT, "Cancel", gtk.RESPONSE_CANCEL)
+	if err != nil {
+		return "", err
+	}
+
 	for _, filt := range b.Filters {
-		filter := gtk.NewFileFilter()
+		filter, err := gtk.FileFilterNew()
+		if err != nil {
+			return "", err
+		}
+
 		filter.SetName(filt.Desc)
 		for _, ext := range filt.Extensions {
 			filter.AddPattern("*." + ext)
