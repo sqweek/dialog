@@ -7,7 +7,7 @@ import (
 	"unicode/utf16"
 	"unsafe"
 
-	"github.com/AllenDang/w32"
+	"github.com/TheTitanrain/w32"
 )
 
 type WinDlgError int
