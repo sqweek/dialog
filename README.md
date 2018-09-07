@@ -30,7 +30,6 @@ Asks the user for a directory.
 
 # build
 ```
-go get -u github.com/golang/dep/cmd/dep
-dep ensure -v
+go mod download
 go build
 ```
