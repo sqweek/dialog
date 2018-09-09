@@ -1,4 +1,4 @@
-module github.com/crazy-max/dialog
+module github.com/sqweek/dialog
 
 require (
 	github.com/AllenDang/w32 v0.0.0-20170622012957-9a4ee0f7d224
