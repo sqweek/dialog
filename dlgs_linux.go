@@ -55,7 +55,7 @@ func (b *FileBuilder) save() (string, error) {
 	}
 	_, err = os.Stat(f)
 	if !os.IsNotExist(err) && !Message("%s already exists, overwrite?", filepath.Base(f)).yesNo() {
-		return "", Cancelled
+		return "", ErrCancelled
 	}
 	return f, nil
 }
@@ -87,7 +87,7 @@ func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (str
 	if r == gtk.RESPONSE_ACCEPT {
 		return dlg.GetFilename(), nil
 	}
-	return "", Cancelled
+	return "", ErrCancelled
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {

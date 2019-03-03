@@ -16,8 +16,12 @@ import (
 	"fmt"
 )
 
-// Cancelled is an error returned when a user cancels/closes a dialog.
-var Cancelled = errors.New("Cancelled")
+// ErrCancelled is an error returned when a user cancels/closes a dialog.
+var ErrCancelled = errors.New("Cancelled")
+
+// Cancelled refers to ErrCancelled.
+// Deprecated: Use ErrCancelled instead.
+var Cancelled = ErrCancelled
 
 // Dlg is the common type for dialogs.
 type Dlg struct {
@@ -102,7 +106,7 @@ func (b *FileBuilder) SetStartDir(startDir string) *FileBuilder {
 }
 
 // Load spawns the file selection dialog using the configured settings,
-// asking the user to select a single file. Returns Cancelled as the error
+// asking the user to select a single file. Returns ErrCancelled as the error
 // if the user cancels or closes the dialog.
 func (b *FileBuilder) Load() (string, error) {
 	return b.load()
@@ -111,7 +115,7 @@ func (b *FileBuilder) Load() (string, error) {
 // Save spawns the file selection dialog using the configured settings,
 // asking the user for a filename to save as. If the chosen file exists, the
 // user is prompted whether they want to overwrite the file. Returns
-// Cancelled as the error if the user cancels/closes the dialog, or selects
+// ErrCancelled as the error if the user cancels/closes the dialog, or selects
 // not to overwrite the file.
 func (b *FileBuilder) Save() (string, error) {
 	return b.save()
@@ -129,7 +133,7 @@ func Directory() *DirectoryBuilder {
 }
 
 // Browse spawns the directory selection dialog using the configured settings,
-// asking the user to select a single folder. Returns Cancelled as the error
+// asking the user to select a single folder. Returns ErrCancelled as the error
 // if the user cancels or closes the dialog.
 func (b *DirectoryBuilder) Browse() (string, error) {
 	return b.browse()
