@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/skelterjohn/go.wde"
+	"github.com/skelterjohn/go.wde" // nolint: goimports
 	"github.com/sqweek/dialog"
 	"image"
 	"image/color"
