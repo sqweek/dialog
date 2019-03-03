@@ -1,0 +1,16 @@
+run:
+  deadline: 5m
+
+linters:
+  enable-all: true
+
+  # linters are disabled if their majority of issues is considered false-positive (intended code)
+  # and the remaining issues (if existing) aren't worth it.
+  disable:
+    - gochecknoinits
+    - gochecknoglobals
+
+issues:
+  exclude-use-default: false # disable filtering of defaults for better zero-issue policy
+  max-per-linter: 0 # disable limit; report all issues of a linter
+  max-same-issues: 0 # disable limit; report all issues of the same issue
