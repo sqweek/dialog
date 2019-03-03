@@ -17,8 +17,7 @@ func events(events <-chan interface{}) {
 	for ei := range events {
 		switch e := ei.(type) {
 		case wde.MouseUpEvent:
-			switch e.Which {
-			case wde.LeftButton:
+			if e.Which == wde.LeftButton {
 				var f string
 				var err error
 				/* launching dialogs within the event loop like this has
@@ -64,8 +63,8 @@ func main() {
 		loadR = image.Rect(0, 0, 300, 150)
 		saveR = image.Rect(0, 150, 300, 300)
 		w.Show()
-		draw.Draw(w.Screen(), loadR, &image.Uniform{color.RGBA{0,0xff,0,0xff}}, image.ZP, draw.Src)
-		draw.Draw(w.Screen(), saveR, &image.Uniform{color.RGBA{0xff,0,0,0xff}}, image.ZP, draw.Src)
+		draw.Draw(w.Screen(), loadR, &image.Uniform{color.RGBA{0, 0xff, 0, 0xff}}, image.ZP, draw.Src)
+		draw.Draw(w.Screen(), saveR, &image.Uniform{color.RGBA{0xff, 0, 0, 0xff}}, image.ZP, draw.Src)
 		w.FlushImage()
 		go events(w.EventChan())
 	}()
