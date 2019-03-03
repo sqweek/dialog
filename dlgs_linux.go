@@ -61,7 +61,8 @@ func (b *FileBuilder) save() (string, error) {
 }
 
 func chooseFile(title string, action gtk.FileChooserAction, b *FileBuilder) (string, error) {
-	dlg, err := gtk.FileChooserDialogNewWith2Buttons(firstOf(b.Dlg.Title, title), nil, action, "Ok", gtk.RESPONSE_ACCEPT, "Cancel", gtk.RESPONSE_CANCEL)
+	dlg, err := gtk.FileChooserDialogNewWith2Buttons(firstOf(b.Dlg.Title, title),
+		nil, action, "Ok", gtk.RESPONSE_ACCEPT, "Cancel", gtk.RESPONSE_CANCEL)
 	if err != nil {
 		return "", err
 	}
