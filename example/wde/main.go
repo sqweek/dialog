@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/skelterjohn/go.wde"
-	"github.com/sqweek/dialog"
 	"image"
 	"image/color"
 	"image/draw"
 
+	"github.com/skelterjohn/go.wde" // nolint: goimports
 	_ "github.com/skelterjohn/go.wde/init"
+	"github.com/sqweek/dialog"
 )
 
 var loadR, saveR image.Rectangle
@@ -17,7 +17,7 @@ func events(events <-chan interface{}) {
 	for ei := range events {
 		switch e := ei.(type) {
 		case wde.MouseUpEvent:
-			switch e.Which {
+			switch e.Which { // nolint: gocritic
 			case wde.LeftButton:
 				var f string
 				var err error
@@ -64,8 +64,8 @@ func main() {
 		loadR = image.Rect(0, 0, 300, 150)
 		saveR = image.Rect(0, 150, 300, 300)
 		w.Show()
-		draw.Draw(w.Screen(), loadR, &image.Uniform{color.RGBA{0,0xff,0,0xff}}, image.ZP, draw.Src)
-		draw.Draw(w.Screen(), saveR, &image.Uniform{color.RGBA{0xff,0,0,0xff}}, image.ZP, draw.Src)
+		draw.Draw(w.Screen(), loadR, &image.Uniform{color.RGBA{0, 0xff, 0, 0xff}}, image.ZP, draw.Src)
+		draw.Draw(w.Screen(), saveR, &image.Uniform{color.RGBA{0xff, 0, 0, 0xff}}, image.ZP, draw.Src)
 		w.FlushImage()
 		go events(w.EventChan())
 	}()

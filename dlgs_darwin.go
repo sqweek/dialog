@@ -44,15 +44,15 @@ func (b *FileBuilder) run(save bool) (string, error) {
 	}
 	f, err := cocoa.FileDlg(save, b.Dlg.Title, exts, star)
 	if f == "" && err == nil {
-		return "", Cancelled
+		return "", ErrCancelled
 	}
 	return f, err
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {
-	f, err := cocoa.DirDlg(b.Dlg.Title);
+	f, err := cocoa.DirDlg(b.Dlg.Title)
 	if f == "" && err == nil {
-		return "", Cancelled
+		return "", ErrCancelled
 	}
 	return f, err
 }
