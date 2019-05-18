@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/skelterjohn/go.wde" // nolint: goimports
-	"github.com/sqweek/dialog"
 	"image"
 	"image/color"
 	"image/draw"
 
+	"github.com/skelterjohn/go.wde" // nolint: goimports
 	_ "github.com/skelterjohn/go.wde/init"
+	"github.com/sqweek/dialog"
 )
 
 var loadR, saveR image.Rectangle
@@ -17,7 +17,8 @@ func events(events <-chan interface{}) {
 	for ei := range events {
 		switch e := ei.(type) {
 		case wde.MouseUpEvent:
-			if e.Which == wde.LeftButton {
+			switch e.Which { // nolint: gocritic
+			case wde.LeftButton:
 				var f string
 				var err error
 				/* launching dialogs within the event loop like this has
