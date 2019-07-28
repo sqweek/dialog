@@ -124,7 +124,7 @@ type dirdlg struct {
 }
 
 func selectdir(b *DirectoryBuilder) (d dirdlg) {
-	d.bi = &w32.BROWSEINFO{Flags: w32.BIF_RETURNONLYFSDIRS}
+	d.bi = &w32.BROWSEINFO{Flags: w32.BIF_RETURNONLYFSDIRS | w32.BIF_NEWDIALOGSTYLE}
 	if b.Dlg.Title != "" {
 		d.bi.Title, _ = syscall.UTF16PtrFromString(b.Dlg.Title)
 	}
