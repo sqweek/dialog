@@ -26,10 +26,24 @@ Asks the user for a directory.
 # platform details
 * OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel classes
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/AllenDang/w32)
-* Linux: uses Gtk's MessageDialog/FileChooserDialog (via package github.com/mattn/gtk)
+* Linux: uses Gtk3's MessageDialog/FileChooserDialog (via package github.com/gotk3/gotk3)
 
 # build
+
+You will first need to set up go modules for you project. That can be done by running:
+
+```bash
+go mod init
 ```
+
+Then you will need to download all modules with:
+
+```bash
 go mod download
+```
+
+Lastly, build your project like normal:
+
+```bash
 go build
 ```
