@@ -32,6 +32,7 @@ type Dlg struct {
 type MsgBuilder struct {
 	Dlg
 	Msg string
+	Top bool
 }
 
 // Message initialises a MsgBuilder with the provided message.
@@ -42,6 +43,11 @@ func Message(format string, args ...interface{}) *MsgBuilder {
 // Title specifies what the title of the message dialog will be.
 func (b *MsgBuilder) Title(title string) *MsgBuilder {
 	b.Dlg.Title = title
+	return b
+}
+
+func (b *MsgBuilder) OnTop() *MsgBuilder {
+	b.Top = true
 	return b
 }
 
