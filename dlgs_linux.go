@@ -46,7 +46,7 @@ func (b *FileBuilder) load() (string, error) {
 }
 
 func (b *FileBuilder) save() (string, error) {
-	f, err := chooseFile("Save File", "Save",  gtk.FILE_CHOOSER_ACTION_SAVE, b)
+	f, err := chooseFile("Save File", "Save", gtk.FILE_CHOOSER_ACTION_SAVE, b)
 	if err != nil {
 		return "", err
 	}
@@ -54,8 +54,15 @@ func (b *FileBuilder) save() (string, error) {
 }
 
 func chooseFile(title string, buttonText string, action gtk.FileChooserAction, b *FileBuilder) (string, error) {
+
+	w, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
+	if err != nil {
+		return "", err
+	}
+	defer w.Destroy()
+
 	dlg, err := gtk.FileChooserDialogNewWith2Buttons(firstOf(b.Dlg.Title, title),
-		nil, action, "Cancel", gtk.RESPONSE_CANCEL, buttonText, gtk.RESPONSE_ACCEPT)
+		w, action, "Cancel", gtk.RESPONSE_CANCEL, buttonText, gtk.RESPONSE_ACCEPT)
 	if err != nil {
 		return "", err
 	}
