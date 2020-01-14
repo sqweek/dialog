@@ -25,16 +25,28 @@ func err() error {
 }
 
 func (b *MsgBuilder) yesNo() bool {
-	r := w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Confirm?"), w32.MB_YESNO)
+	var flg uint = w32.MB_YESNO
+	if b.Top {
+		flg = flg | w32.MB_SYSTEMMODAL
+	}
+	r := w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Confirm?"), flg.(uint))
 	return r == w32.IDYES
 }
 
 func (b *MsgBuilder) info() {
-	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Information"), w32.MB_OK|w32.MB_ICONINFORMATION)
+	var flg uint = w32.MB_OK | w32.MB_ICONINFORMATION
+	if b.Top {
+		flg = flg | w32.MB_SYSTEMMODAL
+	}
+	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Information"), flg)
 }
 
 func (b *MsgBuilder) error() {
-	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Error"), w32.MB_OK|w32.MB_ICONERROR)
+	var flg uint = w32.MB_OK | w32.MB_ICONERROR
+	if b.Top {
+		flg = flg | w32.MB_SYSTEMMODAL
+	}
+	w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Error"), flg)
 }
 
 type filedlg struct {
