@@ -1,4 +1,4 @@
-#include <objc/NSObjcRuntime.h>
+#include <objc/NSObjCRuntime.h>
 
 typedef enum {
 	MSG_YESNO,
