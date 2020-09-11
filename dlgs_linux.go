@@ -1,89 +1,103 @@
 package dialog
 
-import (
-	"github.com/gotk3/gotk3/gtk"
-)
+// #cgo pkg-config: gtk+-3.0
+// #include <gtk/gtk.h>
+// #include <stdlib.h>
+// static GtkWidget* msgdlg(GtkWindow *parent, GtkDialogFlags flags, GtkMessageType type, GtkButtonsType buttons, char *msg) {
+// 	return gtk_message_dialog_new(parent, flags, type, buttons, "%s", msg);
+// }
+// static GtkWidget* filedlg(char *title, GtkWindow *parent, GtkFileChooserAction action, char* acceptText) {
+// 	return gtk_file_chooser_dialog_new(title, parent, action, "Cancel", GTK_RESPONSE_CANCEL, acceptText, GTK_RESPONSE_ACCEPT, NULL);
+// }
+import "C"
+import "unsafe"
 
 func init() {
-	gtk.Init(nil)
+	C.gtk_init(nil, nil)
 }
 
-func closeDialog(dlg *gtk.Dialog) {
-	dlg.Destroy()
+func closeDialog(dlg *C.GtkWidget) {
+	C.gtk_widget_destroy(dlg)
 	/* The Destroy call itself isn't enough to remove the dialog from the screen; apparently
 	** that happens once the GTK main loop processes some further events. But if we're
 	** in a non-GTK app the main loop isn't running, so we empty the event queue before
 	** returning from the dialog functions.
 	** Not sure how this interacts with an actual GTK app... */
-	for gtk.EventsPending() {
-		gtk.MainIteration()
+	for C.gtk_events_pending() != 0 {
+		C.gtk_main_iteration()
 	}
 }
 
+func runMsgDlg(defaultTitle string, flags C.GtkDialogFlags, msgtype C.GtkMessageType, buttons C.GtkButtonsType, b *MsgBuilder) C.gint {
+	cmsg := C.CString(b.Msg)
+	defer C.free(unsafe.Pointer(cmsg))
+	dlg := C.msgdlg(nil, flags, msgtype, buttons, cmsg)
+	ctitle := C.CString(firstOf(b.Dlg.Title, defaultTitle))
+	defer C.free(unsafe.Pointer(ctitle))
+	C.gtk_window_set_title((*C.GtkWindow)(unsafe.Pointer(dlg)), ctitle)
+	defer closeDialog(dlg)
+	return C.gtk_dialog_run((*C.GtkDialog)(unsafe.Pointer(dlg)))
+}
+
 func (b *MsgBuilder) yesNo() bool {
-	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_QUESTION, gtk.BUTTONS_YES_NO, "%s", b.Msg)
-	dlg.SetTitle(firstOf(b.Dlg.Title, "Confirm?"))
-	defer closeDialog(&dlg.Dialog)
-	return dlg.Run() == gtk.RESPONSE_YES
+	return runMsgDlg("Confirm?", 0, C.GTK_MESSAGE_QUESTION, C.GTK_BUTTONS_YES_NO, b) == C.GTK_RESPONSE_YES
 }
 
 func (b *MsgBuilder) info() {
-	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, "%s", b.Msg)
-	dlg.SetTitle(firstOf(b.Dlg.Title, "Information"))
-	defer closeDialog(&dlg.Dialog)
-	dlg.Run()
+	runMsgDlg("Information", 0, C.GTK_MESSAGE_INFO, C.GTK_BUTTONS_OK, b)
 }
 
 func (b *MsgBuilder) error() {
-	dlg := gtk.MessageDialogNew(nil, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "%s", b.Msg)
-	dlg.SetTitle(firstOf(b.Dlg.Title, "Error"))
-	defer closeDialog(&dlg.Dialog)
-	dlg.Run()
+	runMsgDlg("Error", 0, C.GTK_MESSAGE_ERROR, C.GTK_BUTTONS_OK, b)
 }
 
 func (b *FileBuilder) load() (string, error) {
-	return chooseFile("Open File", "Open", gtk.FILE_CHOOSER_ACTION_OPEN, b)
+	return chooseFile("Open File", "Open", C.GTK_FILE_CHOOSER_ACTION_OPEN, b)
 }
 
 func (b *FileBuilder) save() (string, error) {
-	f, err := chooseFile("Save File", "Save",  gtk.FILE_CHOOSER_ACTION_SAVE, b)
+	f, err := chooseFile("Save File", "Save", C.GTK_FILE_CHOOSER_ACTION_SAVE, b)
 	if err != nil {
 		return "", err
 	}
 	return f, nil
 }
 
-func chooseFile(title string, buttonText string, action gtk.FileChooserAction, b *FileBuilder) (string, error) {
-	dlg, err := gtk.FileChooserDialogNewWith2Buttons(firstOf(b.Dlg.Title, title),
-		nil, action, "Cancel", gtk.RESPONSE_CANCEL, buttonText, gtk.RESPONSE_ACCEPT)
-	if err != nil {
-		return "", err
-	}
+func chooseFile(title string, buttonText string, action C.GtkFileChooserAction, b *FileBuilder) (string, error) {
+	ctitle := C.CString(title)
+	defer C.free(unsafe.Pointer(ctitle))
+	cbuttonText := C.CString(buttonText)
+	defer C.free(unsafe.Pointer(cbuttonText))
+	dlg := C.filedlg(ctitle, nil, action, cbuttonText)
+	fdlg := (*C.GtkFileChooser)(unsafe.Pointer(dlg))
 
 	for _, filt := range b.Filters {
-		filter, err := gtk.FileFilterNew()
-		if err != nil {
-			return "", err
-		}
+		filter := C.gtk_file_filter_new()
+		cdesc := C.CString(filt.Desc)
+		defer C.free(unsafe.Pointer(cdesc))
+		C.gtk_file_filter_set_name(filter, cdesc)
 
-		filter.SetName(filt.Desc)
 		for _, ext := range filt.Extensions {
-			filter.AddPattern("*." + ext)
+			cpattern := C.CString("*." + ext)
+			defer C.free(unsafe.Pointer(cpattern))
+			C.gtk_file_filter_add_pattern(filter, cpattern)
 		}
-		dlg.AddFilter(filter)
+		C.gtk_file_chooser_add_filter(fdlg, filter)
 	}
 	if b.StartDir != "" {
-		dlg.SetCurrentFolder(b.StartDir)
+		cdir := C.CString(b.StartDir)
+		defer C.free(unsafe.Pointer(cdir))
+		C.gtk_file_chooser_set_current_folder(fdlg, cdir)
 	}
-	dlg.SetDoOverwriteConfirmation(true)
-	r := dlg.Run()
-	defer closeDialog(&dlg.Dialog)
-	if r == gtk.RESPONSE_ACCEPT {
-		return dlg.GetFilename(), nil
+	C.gtk_file_chooser_set_do_overwrite_confirmation(fdlg, C.TRUE)
+	r := C.gtk_dialog_run((*C.GtkDialog)(unsafe.Pointer(dlg)))
+	defer closeDialog(dlg)
+	if r == C.GTK_RESPONSE_ACCEPT {
+		return C.GoString(C.gtk_file_chooser_get_filename(fdlg)), nil
 	}
 	return "", ErrCancelled
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {
-	return chooseFile("Open Folder", "Open", gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, &FileBuilder{Dlg: b.Dlg})
+	return chooseFile("Open Folder", "Open", C.GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, &FileBuilder{Dlg: b.Dlg})
 }

@@ -26,7 +26,7 @@ Asks the user for a directory.
 # platform details
 * OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel classes
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/TheTitanrain/w32)
-* Linux: uses Gtk's MessageDialog/FileChooserDialog (via package github.com/mattn/go-gtk)
+* Linux: uses Gtk's MessageDialog/FileChooserDialog (via cgo; requires gtk3 development packages)
 
 # build
 ```
