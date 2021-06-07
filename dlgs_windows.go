@@ -123,10 +123,39 @@ type dirdlg struct {
 	bi *w32.BROWSEINFO
 }
 
+const (
+	bffm_INITIALIZED     = 1
+	bffm_SELCHANGED      = 2
+	bffm_VALIDATEFAILEDA = 3
+	bffm_VALIDATEFAILEDW = 4
+	bffm_SETSTATUSTEXTA  = (w32.WM_USER + 100)
+	bffm_SETSTATUSTEXTW  = (w32.WM_USER + 104)
+	bffm_ENABLEOK        = (w32.WM_USER + 101)
+	bffm_SETSELECTIONA   = (w32.WM_USER + 102)
+	bffm_SETSELECTIONW   = (w32.WM_USER + 103)
+	bffm_SETOKTEXT       = (w32.WM_USER + 105)
+	bffm_SETEXPANDED     = (w32.WM_USER + 106)
+	bffm_SETSTATUSTEXT   = bffm_SETSTATUSTEXTW
+	bffm_SETSELECTION    = bffm_SETSELECTIONW
+	bffm_VALIDATEFAILED  = bffm_VALIDATEFAILEDW
+)
+
+func callbackDefaultDir(hwnd w32.HWND, msg uint, lParam, lpData uintptr) int {
+	if msg == bffm_INITIALIZED {
+		_ = w32.SendMessage(hwnd, bffm_SETSELECTION, w32.TRUE, lpData)
+	}
+	return 0
+}
+
 func selectdir(b *DirectoryBuilder) (d dirdlg) {
 	d.bi = &w32.BROWSEINFO{Flags: w32.BIF_RETURNONLYFSDIRS | w32.BIF_NEWDIALOGSTYLE}
 	if b.Dlg.Title != "" {
 		d.bi.Title, _ = syscall.UTF16PtrFromString(b.Dlg.Title)
+	}
+	if b.StartDir != "" {
+		s16, _ := syscall.UTF16PtrFromString(b.StartDir)
+		d.bi.LParam = uintptr(unsafe.Pointer(s16))
+		d.bi.CallbackFunc = syscall.NewCallback(callbackDefaultDir)
 	}
 	return d
 }
