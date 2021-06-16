@@ -145,7 +145,7 @@ func (b *DirectoryBuilder) Title(title string) *DirectoryBuilder {
 	return b
 }
 
-// StartDir specifies the initialize directory to be used for the dialog.
+// StartDir specifies the initial directory to be used for the dialog.
 func (b *DirectoryBuilder) SetStartDir(dir string) *DirectoryBuilder {
 	b.StartDir = dir
 	return b
