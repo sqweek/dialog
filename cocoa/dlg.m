@@ -115,6 +115,7 @@ DlgResult fileDlg(FileDlgParams* params) {
 	NSOpenPanel* panel = [NSOpenPanel openPanel];
 	if(self->params->mode == DIRDLG) {
 		[panel setCanChooseDirectories:YES];
+		[panel setCanCreateDirectories:YES];
 		[panel setCanChooseFiles:NO];
 	}
 	if(![self runPanel:panel]) {
