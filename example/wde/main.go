@@ -60,7 +60,12 @@ func events(events <-chan interface{}) {
 
 func main() {
 	go func() {
-		w, _ := wde.NewWindow(300, 300)
+		w, err := wde.NewWindow(300, 300)
+		if err != nil {
+			fmt.Println("Error creating window:", err)
+			wde.Stop()
+			return
+		}
 		loadR = image.Rect(0, 0, 300, 150)
 		saveR = image.Rect(0, 150, 300, 300)
 		w.Show()
