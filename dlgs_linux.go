@@ -1,6 +1,8 @@
 package dialog
 
 // #cgo pkg-config: gtk+-3.0
+// #cgo LDFLAGS: -lX11
+// #include <X11/Xlib.h>
 // #include <gtk/gtk.h>
 // #include <stdlib.h>
 // static GtkWidget* msgdlg(GtkWindow *parent, GtkDialogFlags flags, GtkMessageType type, GtkButtonsType buttons, char *msg) {
@@ -13,6 +15,7 @@ import "C"
 import "unsafe"
 
 func init() {
+	C.XInitThreads()
 	C.gtk_init(nil, nil)
 }
 
