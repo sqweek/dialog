@@ -70,8 +70,9 @@ type FileFilter struct {
 // FileBuilder is used for creating file browsing dialogs.
 type FileBuilder struct {
 	Dlg
-	StartDir string
-	Filters  []FileFilter
+	StartDir  string
+	StartFile string
+	Filters   []FileFilter
 }
 
 // File initialises a FileBuilder using the default configuration.
@@ -102,6 +103,12 @@ func (b *FileBuilder) Filter(desc string, extensions ...string) *FileBuilder {
 // SetStartDir specifies the initial directory of the dialog.
 func (b *FileBuilder) SetStartDir(startDir string) *FileBuilder {
 	b.StartDir = startDir
+	return b
+}
+
+// SetStartFile specifies the initial file name of the dialog.
+func (b *FileBuilder) SetStartFile(startFile string) *FileBuilder {
+	b.StartFile = startFile
 	return b
 }
 

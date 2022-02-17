@@ -90,6 +90,12 @@ func utf16slice(ptr *uint16) []uint16 {
 
 func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 	d.buf = make([]uint16, w32.MAX_PATH)
+	if b.StartFile != "" {
+		initialName, _ := syscall.UTF16FromString(b.StartFile)
+		for i := 0; i < len(initialName) && i < w32.MAX_PATH; i++ {
+			d.buf[i] = initialName[i]
+		}
+	}
 	d.opf = &w32.OPENFILENAME{
 		File:    utf16ptr(d.buf),
 		MaxFile: uint32(len(d.buf)),
