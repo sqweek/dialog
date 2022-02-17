@@ -102,6 +102,11 @@ func chooseFile(title string, buttonText string, action C.GtkFileChooserAction, 
 		defer C.free(unsafe.Pointer(cdir))
 		C.gtk_file_chooser_set_current_folder(fdlg, cdir)
 	}
+	if b.StartFile != "" {
+		cfile := C.CString(b.StartFile)
+		defer C.free(unsafe.Pointer(cfile))
+		C.gtk_file_chooser_set_current_name(fdlg, cfile)
+	}
 	C.gtk_file_chooser_set_do_overwrite_confirmation(fdlg, C.TRUE)
 	r := C.gtk_dialog_run((*C.GtkDialog)(unsafe.Pointer(dlg)))
 	defer closeDialog(dlg)

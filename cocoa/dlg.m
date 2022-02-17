@@ -101,6 +101,9 @@ DlgResult fileDlg(FileDlgParams* params) {
 	if(self->params->startDir) {
 		[panel setDirectoryURL:[NSURL URLWithString:[[NSString alloc] initWithUTF8String:self->params->startDir]]];
 	}
+	if(self->params->filename != nil) {
+		[panel setNameFieldStringValue:[[NSString alloc] initWithUTF8String:self->params->filename]];
+	}
 	return [panel runModal];
 }
 

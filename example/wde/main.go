@@ -37,7 +37,7 @@ func events(events <-chan interface{}) {
 				if e.Where.In(loadR) {
 					f, err = dialog.File().Title("LOL").Filter("Image", "png").Filter("Audio", "mp3").Filter("All files", "*").Load()
 				} else {
-					f, err = dialog.File().Title("Hilarious").Save()
+					f, err = dialog.File().Title("Hilarious").SetStartFile("hahaha").Save()
 				}
 				fmt.Println(f)
 				fmt.Println("Error:", err)
