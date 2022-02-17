@@ -52,7 +52,7 @@ func (d filedlg) Filename() string {
 }
 
 func (b *FileBuilder) load() (string, error) {
-	d := openfile(w32.OFN_FILEMUSTEXIST, b)
+	d := openfile(w32.OFN_FILEMUSTEXIST|w32.OFN_NOCHANGEDIR, b)
 	if w32.GetOpenFileName(d.opf) {
 		return d.Filename(), nil
 	}
@@ -60,7 +60,7 @@ func (b *FileBuilder) load() (string, error) {
 }
 
 func (b *FileBuilder) save() (string, error) {
-	d := openfile(w32.OFN_OVERWRITEPROMPT, b)
+	d := openfile(w32.OFN_OVERWRITEPROMPT|w32.OFN_NOCHANGEDIR, b)
 	if w32.GetSaveFileName(d.opf) {
 		return d.Filename(), nil
 	}
