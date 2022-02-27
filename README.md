@@ -33,3 +33,6 @@ Asks the user for a directory.
 go mod download
 go build
 ```
+
+# bugs
+On windows, the Load() and Save() calls change the working directory for the whole process while the dialog is open (after which it reset). This is an apparently unavoidable side effect of the underlying W32API; see #63 for more details.
