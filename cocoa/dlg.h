@@ -21,6 +21,7 @@ typedef struct {
 	char* buf; /* buffer to store selected file */
 	int nbuf; /* number of bytes allocated at buf */
 	char* title; /* title for dialog box (can be nil) */
+	char* filename; /* default filename for dialog box (can be nil) */
 	void** exts; /* list of valid extensions (elements actual type is NSString*) */
 	int numext; /* number of items in exts */
 	int relaxext; /* allow other extensions? */
