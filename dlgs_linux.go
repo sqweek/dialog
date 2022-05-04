@@ -14,9 +14,17 @@ package dialog
 import "C"
 import "unsafe"
 
+var initSuccess bool
+
 func init() {
 	C.XInitThreads()
-	C.gtk_init(nil, nil)
+	initSuccess = (C.gtk_init_check(nil, nil) == C.TRUE)
+}
+
+func checkStatus() {
+	if !initSuccess {
+		panic("gtk initialisation failed; presumably no X server is available")
+	}
 }
 
 func closeDialog(dlg *C.GtkWidget) {
@@ -32,6 +40,7 @@ func closeDialog(dlg *C.GtkWidget) {
 }
 
 func runMsgDlg(defaultTitle string, flags C.GtkDialogFlags, msgtype C.GtkMessageType, buttons C.GtkButtonsType, b *MsgBuilder) C.gint {
+	checkStatus()
 	cmsg := C.CString(b.Msg)
 	defer C.free(unsafe.Pointer(cmsg))
 	dlg := C.msgdlg(nil, flags, msgtype, buttons, cmsg)
@@ -67,6 +76,7 @@ func (b *FileBuilder) save() (string, error) {
 }
 
 func chooseFile(title string, buttonText string, action C.GtkFileChooserAction, b *FileBuilder) (string, error) {
+	checkStatus()
 	ctitle := C.CString(title)
 	defer C.free(unsafe.Pointer(ctitle))
 	cbuttonText := C.CString(buttonText)
