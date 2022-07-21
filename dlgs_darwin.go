@@ -42,7 +42,7 @@ func (b *FileBuilder) run(save bool) (string, error) {
 		** dialog, so if "*" is a possible extension we must always show all files. */
 		exts = nil
 	}
-	f, err := cocoa.FileDlg(save, b.Dlg.Title, exts, star)
+	f, err := cocoa.FileDlg(save, b.Dlg.Title, exts, star, b.StartDir)
 	if f == "" && err == nil {
 		return "", ErrCancelled
 	}
@@ -50,7 +50,7 @@ func (b *FileBuilder) run(save bool) (string, error) {
 }
 
 func (b *DirectoryBuilder) browse() (string, error) {
-	f, err := cocoa.DirDlg(b.Dlg.Title)
+	f, err := cocoa.DirDlg(b.Dlg.Title, b.StartDir)
 	if f == "" && err == nil {
 		return "", ErrCancelled
 	}

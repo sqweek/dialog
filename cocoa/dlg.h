@@ -24,6 +24,7 @@ typedef struct {
 	void** exts; /* list of valid extensions (elements actual type is NSString*) */
 	int numext; /* number of items in exts */
 	int relaxext; /* allow other extensions? */
+	char* startDir; /* directory to start in (can be nil) */
 } FileDlgParams;
 
 typedef enum {
