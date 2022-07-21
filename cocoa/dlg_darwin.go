@@ -59,19 +59,19 @@ func ErrorDlg(msg, title string) {
 
 const BUFSIZE = C.PATH_MAX
 
-func FileDlg(save bool, title string, exts []string, relaxExt bool) (string, error) {
+func FileDlg(save bool, title string, exts []string, relaxExt bool, startDir string) (string, error) {
 	mode := C.LOADDLG
 	if save {
 		mode = C.SAVEDLG
 	}
-	return fileDlg(mode, title, exts, relaxExt)
+	return fileDlg(mode, title, exts, relaxExt, startDir)
 }
 
-func DirDlg(title string) (string, error) {
-	return fileDlg(C.DIRDLG, title, nil, false)
+func DirDlg(title string, startDir string) (string, error) {
+	return fileDlg(C.DIRDLG, title, nil, false, startDir)
 }
 
-func fileDlg(mode int, title string, exts []string, relaxExt bool) (string, error) {
+func fileDlg(mode int, title string, exts []string, relaxExt bool, startDir string) (string, error) {
 	p := C.FileDlgParams{
 		mode: C.int(mode),
 		nbuf: BUFSIZE,
@@ -82,6 +82,10 @@ func fileDlg(mode int, title string, exts []string, relaxExt bool) (string, erro
 	if title != "" {
 		p.title = C.CString(title)
 		defer C.free(unsafe.Pointer(p.title))
+	}
+	if startDir != "" {
+		p.startDir = C.CString(startDir)
+		defer C.free(unsafe.Pointer(p.startDir))
 	}
 	if len(exts) > 0 {
 		if len(exts) > 999 {

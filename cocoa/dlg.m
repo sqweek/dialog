@@ -98,6 +98,9 @@ DlgResult fileDlg(FileDlgParams* params) {
 	if(self->params->relaxext) {
 		[panel setAllowsOtherFileTypes:YES];
 	}
+	if(self->params->startDir) {
+		[panel setDirectoryURL:[NSURL URLWithString:[[NSString alloc] initWithUTF8String:self->params->startDir]]];
+	}
 	return [panel runModal];
 }
 
