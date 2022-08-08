@@ -71,7 +71,7 @@ func DirDlg(title string, startDir string) (string, error) {
 	return fileDlg(C.DIRDLG, title, nil, false, startDir, "")
 }
 
-func fileDlg(mode int, title string, exts []string, relaxExt bool, startDir string) (string, error) {
+func fileDlg(mode int, title string, exts []string, relaxExt bool, startDir, filename string) (string, error) {
 	p := C.FileDlgParams{
 		mode: C.int(mode),
 		nbuf: BUFSIZE,
