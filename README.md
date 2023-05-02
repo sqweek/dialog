@@ -5,7 +5,7 @@ Simple cross-platform dialog API for go-lang
     ok := dialog.Message("%s", "Do you want to continue?").Title("Are you sure?").YesNo()
 
 Creates a dialog box titled "Are you sure?", containing the message "Do you want to continue?",
-a "Yes" button and a "No" button. Returns true iff the dialog could be displayed and the user
+a "Yes" button and a "No" button. Returns true if the dialog could be displayed and the user
 pressed the "Yes" button.
 
     filename, err := dialog.File().Filter("Mp3 audio file", "mp3").Load()
