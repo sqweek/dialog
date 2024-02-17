@@ -52,6 +52,11 @@ DlgResult alertDlg(AlertDlgParams* params) {
 		[alert addButtonWithTitle:@"OK"];
 		break;
 	}
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+	[[alert window] makeKeyAndOrderFront:self];
+	[[alert window] setOrderedIndex:0];
+
 	self->result = [alert runModal] == NSAlertFirstButtonReturn ? DLG_OK : DLG_CANCEL;
 	return self->result;
 }
@@ -104,6 +109,10 @@ DlgResult fileDlg(FileDlgParams* params) {
 	if(self->params->filename != nil) {
 		[panel setNameFieldStringValue:[[NSString alloc] initWithUTF8String:self->params->filename]];
 	}
+
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+
 	return [panel runModal];
 }
 
