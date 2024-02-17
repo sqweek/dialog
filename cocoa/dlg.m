@@ -5,6 +5,16 @@ void* NSStr(void* buf, int len) {
 	return (void*)[[NSString alloc] initWithBytes:buf length:len encoding:NSUTF8StringEncoding];
 }
 
+void checkActivationPolicy() {
+	NSApplicationActivationPolicy policy = [NSApp activationPolicy];
+	// prohibited NSApp will not show the panel at all.
+	// It probably means that this is not run in a GUI app, that would set the policy on its own,
+	// but in a terminal app - setting it to accessory will allow dialogs to show
+	if (policy == NSApplicationActivationPolicyProhibited) {
+		[NSApp setActivationPolicy:NSApplicationActivationPolicyAccessory];
+	}
+}
+
 void NSRelease(void* obj) {
 	[(NSObject*)obj release];
 }
@@ -52,6 +62,9 @@ DlgResult alertDlg(AlertDlgParams* params) {
 		[alert addButtonWithTitle:@"OK"];
 		break;
 	}
+
+	checkActivationPolicy();
+
 	self->result = [alert runModal] == NSAlertFirstButtonReturn ? DLG_OK : DLG_CANCEL;
 	return self->result;
 }
@@ -104,6 +117,9 @@ DlgResult fileDlg(FileDlgParams* params) {
 	if(self->params->filename != nil) {
 		[panel setNameFieldStringValue:[[NSString alloc] initWithUTF8String:self->params->filename]];
 	}
+
+	checkActivationPolicy();
+
 	return [panel runModal];
 }
 

@@ -24,7 +24,8 @@ an additional dialog is spawned to confirm they want to overwrite the existing f
 Asks the user for a directory.
 
 # platform details
-* OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel classes
+* OSX: uses Cocoa's NSAlert/NSSavePanel/NSOpenPanel/NSApp classes
+    * requires macOS 10.6+ for `NSApplicationActivationPolicyAccessory`
 * Win32: uses MessageBox/GetOpenFileName/GetSaveFileName (via package github.com/TheTitanrain/w32)
 * Linux: uses Gtk's MessageDialog/FileChooserDialog (via cgo; requires gtk3 development packages)
 
