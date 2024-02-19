@@ -1,4 +1,5 @@
 #import <Cocoa/Cocoa.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #include "dlg.h"
 
 void* NSStr(void* buf, int len) {
@@ -93,7 +94,15 @@ DlgResult fileDlg(FileDlgParams* params) {
 		[panel setTitle:[[NSString alloc] initWithUTF8String:self->params->title]];
 	}
 	if(self->params->numext > 0) {
-		[panel setAllowedFileTypes:[NSArray arrayWithObjects:(NSString**)self->params->exts count:self->params->numext]];
+		NSString** exts = (NSString**)self->params->exts;
+		NSMutableArray *types = [NSMutableArray array];
+
+		for (int i=0; i<self->params->numext; i++) {
+			NSString* ext = exts[i];
+			UTType *t = [UTType typeWithFilenameExtension: exts[i]];
+			[types addObject: t];
+		}
+		[panel setAllowedContentTypes:types];
 	}
 	if(self->params->relaxext) {
 		[panel setAllowsOtherFileTypes:YES];
