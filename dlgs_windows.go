@@ -25,7 +25,7 @@ func err() error {
 }
 
 func (b *MsgBuilder) yesNo() bool {
-	r := w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Confirm?"), w32.MB_YESNO)
+	r := w32.MessageBox(w32.HWND(0), b.Msg, firstOf(b.Dlg.Title, "Confirm?"), w32.MB_YESNO|w32.MB_ICONQUESTION)
 	return r == w32.IDYES
 }
 
