@@ -2,7 +2,9 @@ package dialog
 
 import (
 	"fmt"
+	"path"
 	"reflect"
+	"slices"
 	"syscall"
 	"unicode/utf16"
 	"unsafe"
@@ -62,7 +64,17 @@ func (b *FileBuilder) load() (string, error) {
 func (b *FileBuilder) save() (string, error) {
 	d := openfile(w32.OFN_OVERWRITEPROMPT|w32.OFN_NOCHANGEDIR, b)
 	if w32.GetSaveFileName(d.opf) {
-		return d.Filename(), nil
+		filename := d.Filename()
+		filterExt := b.Filters[d.opf.FilterIndex-1].Extensions
+		fileext := path.Ext(filename)
+		if len(fileext) > 0 {
+			fileext = fileext[1:]
+		}
+		if slices.Contains(filterExt, fileext) {
+			return filename, nil
+		}
+
+		return filename + "." + filterExt[0], nil
 	}
 	return "", err()
 }

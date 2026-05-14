@@ -1,3 +1,5 @@
+//go:build !android
+
 package dialog
 
 // #cgo pkg-config: gtk+-3.0
